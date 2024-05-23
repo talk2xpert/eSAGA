@@ -5,15 +5,15 @@ import datetime
 class image_capturing:
 
 
-    def start_capturing_images_from_vcam(image_path,f_count=10):
+    def start_capturing_images_from_vcam(image_path,f_count=5):
         time = 1000
         # def start_capturing_images_from_vcam(image_path,time):
         try:
             print("Starting The Video")
             video_capture = cv2.VideoCapture(0)
-            print("Video Capture")
             frame_count = 0  # Counter to track the frames
-            while True or frame_count <= f_count:
+            print("Video Capture", frame_count)
+            while frame_count <= f_count:
                 ret, frame = video_capture.read()
                 print(ret)
                 print(frame)

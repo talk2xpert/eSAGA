@@ -7,6 +7,13 @@ from PIL import Image
 class image_similarity_matcher:
 
     def image_similarity_match(image_to_verify,reference_image):
+      try:
         # Verify faces
         result = DeepFace.verify(img1_path=image_to_verify, img2_path=reference_image, model_name='Facenet', distance_metric='cosine')
+
         return result["verified"]
+      except Exception as e:
+          print("Face Not Detected")
+          print("Error:", e)
+
+

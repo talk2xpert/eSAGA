@@ -42,8 +42,18 @@ class main:
         most_common_value,count=image_validator.image_similarity_check(image_paths,reference_image_path)
         print(f"The value that occurs the most is: {most_common_value} with {count} occurrences.")
 
-        if (most_common_value == "False"):
-            print("**********************FAILED SIMILARITY TEST*************************")
+        bool1 = True
+        bool2 = False
+
+        if (most_common_value==bool1):
+            print("**********************PASSED SIMILARITY TEST*************************")
+            print("**********************PLEASE CONTINUE*************************")
+        elif( most_common_value==bool2):
+            print("**********************FAILED SIMILARITY TEST ************************")
+            print("**********************PLEASE EXIT*************************")
+
+        else:
+            print("**********************FAILED SIMILARITY TEST AS FACE NOT DETECTED************************")
             print("**********************PLEASE EXIT*************************")
 
 

@@ -11,12 +11,14 @@ class image_validator:
 
     def image_similarity_check(image_paths,reference_image):
         results = []
+            #for image_to_verify in image_paths:
+        helper.plot_comparing_images(image_paths, reference_image)
 
         for image_to_verify in image_paths:
-            helper.plot_comparing_images(image_to_verify, reference_image)
             result = image_similarity_matcher.image_similarity_match(image_to_verify, reference_image)
             print("Result of Similarity is ", result)
             results.append(result)
+
         most_common_value, count = helper.likelihood_estimator(results)
         return most_common_value, count
 
