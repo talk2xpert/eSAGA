@@ -1,0 +1,4 @@
+paths:
+  model_path : "/content/drive/MyDrive/BYOP-SAGA/Model/26APR2024/Rinki/finalized_model-17may2024.h5"
+  voting_repository: "/content/drive/MyDrive/BYOP-SAGA/Model/vot_repo"
+  reference_image_repository: "/content/drive/MyDrive/BYOP-SAGA/Model/can_repo"
