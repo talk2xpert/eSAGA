@@ -1,0 +1,4 @@
+paths:
+  model_path : "D:\\San\\IIM\\SEM3\\GROUP-BYOP\\test\\model\\finalized_model-19may2024.h5"
+  voting_repository: "D:\\San\\IIM\\SEM3\\GROUP-BYOP\\test\\vot_repo"
+  reference_image_repository: "D:\\San\\IIM\\SEM3\\GROUP-BYOP\\test\\can_repo"
