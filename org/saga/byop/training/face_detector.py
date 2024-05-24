@@ -1,33 +1,24 @@
 import dlib
 import cv2
 import matplotlib.pyplot as plt
+# Open video capture device (webcam)
+video_capture = cv2.VideoCapture(0)
 
-# Open webcam
-cap = cv2.VideoCapture(0)
-detector = dlib.get_frontal_face_detector()
+frame_count = 0  # Counter to track the frames
 
-while True:
-    ret, frame = cap.read()
+while frame_count <= 20:
+    # Read a frame from the video stream
+    ret, frame = video_capture.read()
+
     if not ret:
         break
 
-    # Convert frame to grayscale
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    # Increment frame counter
+    frame_count += 1
 
-    # Detect faces in the grayscale frame
-    faces = detector(gray)
+    print("Frame Count is ",frame_count)
 
-    for face in faces:
-        x, y, w, h = (face.left(), face.top(), face.width(), face.height())
-        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
-    plt.imshow(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
-    plt.axis('off')
-    plt.show()
-
-    # Display the frame
-    cv2.imshow("Frame", frame)
-    key = cv2.waitKey(1) & 0xFF
 
     # Break the loop if 'q' key is pressed
     if key == ord("q"):

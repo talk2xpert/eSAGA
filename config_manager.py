@@ -19,14 +19,18 @@ def get_model_path():
 
 def get_candidate_repository_path():
      path=CONFIG['paths']['reference_image_repository']
-     print(path)
+     #print(path)
      return path
 
 def get_voting_repository_path():
     path= CONFIG['paths']['voting_repository']
-    print(path)
+    #print(path)
     return path
 
+def face_detector_model_path():
+    path= CONFIG['paths']['face_detector_model_path']
+    #print(path)
+    return path
 # Example usage
 if __name__ == "__main__":
 
