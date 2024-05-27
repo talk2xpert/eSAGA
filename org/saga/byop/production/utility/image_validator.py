@@ -3,24 +3,52 @@ from tensorflow.keras.models import load_model
 from .spoof_evaluator import spoof_evaluator
 from .helper import helper
 from .image_similarity_matcher import image_similarity_matcher
+
 import logging
 import config_manager
 
+from tqdm import tqdm
 
 class image_validator:
 
-    def image_similarity_check(image_paths,reference_image):
+    def image_similarity_check(image_paths, reference_image):
         results = []
-            #for image_to_verify in image_paths:
+        verify_result=[]
+        # for image_to_verify in image_paths:
         helper.plot_comparing_images(image_paths, reference_image)
 
         for image_to_verify in image_paths:
             result = image_similarity_matcher.image_similarity_match(image_to_verify, reference_image)
-            print("Result of Similarity is ", result)
+
+            if result is not None:  # Check if result is valid before appending
+                verify_result.append(result["verified"])
+            else:
+                print(" None Detected for : " , image_to_verify)
+
+
+            #image_similarity_matcher.ensemble_verify(reference_image, image_to_verify)
+            # # Call the comparison function
+            # result, message = image_similarity_matcher.compare_faces(image_to_verify, reference_image)
+
             results.append(result)
 
-        most_common_value, count = helper.likelihood_estimator(results)
+        image_similarity_matcher.generate_xai_report_summary(results)
+        most_common_value, count = helper.likelihood_estimator(verify_result)
+
         return most_common_value, count
+
+    # def image_similarity_check_27May_Issuewith arrayimag(image_paths,reference_image):
+    #     results = []
+    #     for image_to_verify in image_paths:
+    #         print("*************IMAGE PLOT PATHS*********")
+    #         print(image_to_verify)
+    #         print(reference_image)
+    #         helper.plot_comparing_images(image_to_verify, reference_image)
+    #         result = image_similarity_matcher.image_similarity_match(image_to_verify, reference_image)
+    #         print("Result of Similarity is ", result)
+    #         results.append(result)
+    #     most_common_value, count = helper.likelihood_estimator(results)
+    #     return most_common_value, count
 
     def image_spoof_check(image_paths):
         # 1-load the model
