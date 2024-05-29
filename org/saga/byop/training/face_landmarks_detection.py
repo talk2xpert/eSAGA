@@ -27,8 +27,11 @@ class face_landmarks_detection:
             x2 = face.right()
             y2 = face.bottom()
             # Draw a rectangle around the face (optional)
+
             if(draw_rectangle):
                 cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 1)
+                cv2.putText(frame, "Face #{}".format(1), (x1 - 10, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
+                            (0, 255, 0), 2)
             # Detect facial landmarks
             landmarks = self.predictor(img_gray, face)
             # Loop through each landmark point
@@ -38,3 +41,4 @@ class face_landmarks_detection:
 
                 # Draw a circle around each landmark point
                 cv2.circle(frame, (x, y), 2, (255, 0, 0), -1)
+                frame

@@ -3,6 +3,7 @@ from tensorflow.keras.models import load_model
 from .spoof_evaluator import spoof_evaluator
 from .helper import helper
 from .image_similarity_matcher import image_similarity_matcher
+import cv2
 
 import logging
 import config_manager
@@ -14,10 +15,14 @@ class image_validator:
     def image_similarity_check(image_paths, reference_image):
         results = []
         verify_result=[]
+        test_images=[]
         # for image_to_verify in image_paths:
         helper.plot_comparing_images(image_paths, reference_image)
 
         for image_to_verify in image_paths:
+            img2 = cv2.imread(reference_image)
+            img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2RGB)
+            test_images.append(img2)
             result = image_similarity_matcher.image_similarity_match(image_to_verify, reference_image)
 
             if result is not None:  # Check if result is valid before appending
@@ -31,8 +36,10 @@ class image_validator:
             # result, message = image_similarity_matcher.compare_faces(image_to_verify, reference_image)
 
             results.append(result)
-
+        # Create the plot
+        helper.plot_similarity_score(results)
         image_similarity_matcher.generate_xai_report_summary(results)
+        helper.create_pdf_report(reference_image, test_images, results, "similarity_plot.png")
         most_common_value, count = helper.likelihood_estimator(verify_result)
 
         return most_common_value, count
