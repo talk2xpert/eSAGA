@@ -36,7 +36,7 @@ class blink_detection:
 		self.landmark_predict = dlib.shape_predictor(model_path)
 
 	def blink_detector(self,frame):
-
+		ear_values = []
 		result=False
 		global shape, count_frame
 		# converting frame to gray scale to
@@ -68,6 +68,9 @@ class blink_detection:
 			print(self.count_frame)
 			# Avg of left and right eye EAR
 			avg = (left_EAR + right_EAR) / 2
+
+			ear_values.append(avg)
+
 			if avg < self.blink_thresh and self.count_frame >= self.succ_frame:
 				self.count_frame = 0
 				cv2.putText(frame, 'Blink Detected', (30, 30),
@@ -79,7 +82,7 @@ class blink_detection:
 
 			cv2.drawContours(frame, [cv2.convexHull(np.array(lefteye))], -1, (0, 255, 0), 1)
 			cv2.drawContours(frame, [cv2.convexHull(np.array(righteye))], -1, (0, 255, 0), 1)
-		return result
+		return result,ear_values,self.blink_count
 
 
 # defining a function to calculate the EAR

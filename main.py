@@ -22,9 +22,17 @@ class main:
         #image_capturing.start_capturing_images_from_vcam(candidate_directory_path,10)
 
         fd = face_detection.face_detection()
-        blink_results=fd.face_detector(config_manager.get_frame_count(),candidate_image_directory_path,True,True)
+        blink_results,ear_values=fd.face_detector(config_manager.get_frame_count(),candidate_image_directory_path,True,True)
+
+        # Create the plot
+        helper.plot_ear_values(ear_values)
+        # Create PDF report
+        helper.create_pdf_report(len(blink_results), "ear_plot.png", ear_values)
+
         most_common_value, count = helper.likelihood_estimator(blink_results)
         print(f"** The value that occurs the most is: {most_common_value} with {count} occurrences. **")
+        print(
+            f"BLINK DETECTION STAGE [RESULT] : The most predicted outcome - {most_common_value} with {count} occurrences.")
 
         # reading the captured images of the candidate
         image_paths = helper.load_images_from_dir(candidate_image_directory_path)
@@ -47,6 +55,8 @@ class main:
         reference_image_path=os.path.join(reference_image_repository_path,candidate_name + ".jpg")
         # print(reference_image_path)
         most_common_value,count=image_validator.image_similarity_check(image_paths,reference_image_path)
+
+
         print(f"SIMILARITY CHECK [RESULT] : The value that occurs the most is: {most_common_value} with {count} occurrences.")
 
         bool1 = True

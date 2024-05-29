@@ -26,20 +26,21 @@ class  face_detection:
 
                 _, frame = cam.read()
                 frame_count =frame_count+1
-                filename = f'Capture_{frame_count}.jpg'
-                frame_name = os.path.join(candidate_image_directory_path, filename)
-                print(frame_name)
-                cv2.imwrite(frame_name, frame)
+                if(frame_count<=10):
+                    filename = f'Capture_{frame_count}.jpg'
+                    frame_name = os.path.join(candidate_image_directory_path, filename)
+                    print(frame_name)
+                    cv2.imwrite(frame_name, frame)
 
                 frame = imutils.resize(frame, width=640)
                 if(blink_detection_status):
-                    result=b.blink_detector(frame)
+                    result,ear_values=b.blink_detector(frame)
                     if(result):
                         print(" **  BLINK DETECTED    **")
-                        blink_results.append("BLINK Detected")
+                        blink_results.append("Blink Detected")
                     else:
                         print(" ........NO BLINK DETECTED ")
-                        blink_results.append("No BLINK Detected")
+                        blink_results.append("No Blink Detected")
                 if (landmark_detection_status):
                     face.face_landmark_detector(frame)
                     #blink_results.append(result)
@@ -58,7 +59,7 @@ class  face_detection:
         finally:
             cam.release()
             cv2.destroyAllWindows()
-        return blink_results
+        return blink_results,ear_values
 
 
 #f=face_detection()
