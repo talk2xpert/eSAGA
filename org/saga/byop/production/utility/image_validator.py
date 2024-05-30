@@ -38,7 +38,7 @@ class image_validator:
             results.append(result)
         # Create the plot
         helper.plot_similarity_score(results)
-        image_similarity_matcher.generate_xai_report_summary(results)
+        #image_similarity_matcher.generate_xai_report_summary(results)
         helper.create_pdf_report(reference_image, test_images, results, "similarity_plot.png")
         most_common_value, count = helper.likelihood_estimator(verify_result)
 
