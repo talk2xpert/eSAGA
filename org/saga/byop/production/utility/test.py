@@ -13,7 +13,8 @@ from reportlab.lib.styles import getSampleStyleSheet
 model = tf.keras.applications.mobilenet_v2.MobileNetV2(weights='imagenet', include_top=True)
 
 # Load and preprocess the image
-img_path = 'C:\\Users\\Rinki\\Downloads\\archive\\LCC_FASD\\LCC_FASD_training\\real\\YOUTUBE_id99_s2_15.png'
+#img_path = 'C:\\Users\\Rinki\\Downloads\\archive\\LCC_FASD\\LCC_FASD_training\\real\\YOUTUBE_id99_s2_15.png'
+img_path ="C:\\Users\\Rinki\\Downloads\\sampleimages-20240531T114728Z-001\\sampleimages\\Capture_42.jpg"
 img = tf.keras.preprocessing.image.load_img(img_path, target_size=(224, 224))
 img_array = tf.keras.preprocessing.image.img_to_array(img)
 img_array = np.expand_dims(img_array, axis=0)
