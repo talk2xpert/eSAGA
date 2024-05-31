@@ -18,6 +18,7 @@ class image_similarity_matcher:
         # Verify faces
         result = DeepFace.verify(img1_path=image_to_verify, img2_path=reference_image, model_name='Facenet', distance_metric='cosine')
         print("..",end="")
+        #print (result)
 
         #return result["verified"]
         return result

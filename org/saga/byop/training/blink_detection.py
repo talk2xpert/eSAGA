@@ -34,9 +34,10 @@ class blink_detection:
 		# face Detection
 		self.detector = dlib.get_frontal_face_detector()
 		self.landmark_predict = dlib.shape_predictor(model_path)
+		self.ear_values = []
 
 	def blink_detector(self,frame):
-		ear_values = []
+
 		result=False
 		global shape, count_frame
 		# converting frame to gray scale to
@@ -44,7 +45,8 @@ class blink_detection:
 		img_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 		# detecting the faces
 		faces = self.detector(img_gray)
-
+		cv2.putText(frame, 'Blink continously for passing the test  ... ', (30, 430),
+					cv2.FONT_HERSHEY_DUPLEX, 1, (200, 0, 0), 1)
 		if len(faces) == 0:
 			raise FaceNotFoundException("No face found in the frame")
 
@@ -69,20 +71,20 @@ class blink_detection:
 			# Avg of left and right eye EAR
 			avg = (left_EAR + right_EAR) / 2
 
-			ear_values.append(avg)
+			self.ear_values.append(avg)
 
 			if avg < self.blink_thresh and self.count_frame >= self.succ_frame:
 				self.count_frame = 0
-				cv2.putText(frame, 'Blink Detected', (30, 30),
+				cv2.putText(frame, 'Hurray ... Blink Detected', (30, 30),
 							cv2.FONT_HERSHEY_DUPLEX, 1, (0, 200, 0), 1)
 				return True  # Return True if blink detected
 			elif avg < self.blink_thresh:
 				self.count_frame += 1  # Incrementing the frame count
 
-
 			cv2.drawContours(frame, [cv2.convexHull(np.array(lefteye))], -1, (0, 255, 0), 1)
 			cv2.drawContours(frame, [cv2.convexHull(np.array(righteye))], -1, (0, 255, 0), 1)
-		return result,ear_values,self.blink_count
+		#print(len(ear_values))
+		return result
 
 
 # defining a function to calculate the EAR

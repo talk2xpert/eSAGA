@@ -3,7 +3,10 @@ paths:
   voting_repository: "D:\\San\\IIM\\SEM3\\GROUP-BYOP\\test\\vot_repo"
   reference_image_repository: "D:\\San\\IIM\\SEM3\\GROUP-BYOP\\test\\can_repo"
   face_detection_model_path: "D:\\San\\IIM\\SEM3\\GROUP-BYOP\\source\\esagav2\\eSAGA\\shape_predictor_68_face_landmarks.dat"
-
+  training_model_path: "D:\\San\\IIM\\SEM3\\GROUP-BYOP\\model"
+  checkpoint_filepath: "D:\\San\\IIM\\SEM3\\GROUP-BYOP\\model\\tmp.keras"
+  train_dataset_path: "D:\\San\\IIM\\SEM3\\GROUP-BYOP\\data"
+  test_dataset_path: "D:\\San\\IIM\\SEM3\\GROUP-BYOP\\data"
 parameters:
-  frame_count: 60
+  frame_count: 1000
   wait_time: 10

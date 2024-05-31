@@ -52,3 +52,58 @@ Here are some approaches to determine the ideal threshold for your use case:
 ## Important Note:
 
 The provided code snippet (`if result['distance'] > threshold...`) suggests adjusting the threshold based on the distance if verification fails, but it doesn't directly set the threshold value. You'll need to experiment or consult DeepFace documentation to determine the optimal threshold for your specific application.
+
+
+=========================================================================================
+# Algorithm 
+
+## Face Authentication Algorithm
+
+### 1. Main Execution
+```python
+m = main()
+m.run("sanjay")
+```
+
+#### 1.01: Face Detection
+- **Video Capture**: Initialize video capture to record the candidate.
+- **Face Detection**: Detect faces in the video stream.
+- **Blink Detection**: Monitor blinking events to ensure the candidate's presence.
+- **Landmark Identification**: Identify key facial landmarks for further analysis.
+- **Exceptions**:
+  - `FaceNotFoundException`: Raised if no face is detected.
+  - `BlinkNotDetected`: Raised if no blink is detected.
+
+#### 1.02: Blink Event Verification
+- **Condition**: Proceed if more than one blink/not blink event is recorded during video capture.
+- **Likelihood Estimation**: Estimate the likelihood of authenticity based on blink results.
+  - **Image Staging**: Load captured images of the candidate from the staging folder.
+
+##### 1.02.01: Spoof Detection (class `image_validator`)
+- **Spoof Check**: Perform spoof detection on images using a classification model trained by the SAGA Team (MobileNetV2).
+  - **Load Model**: Load the model defined in the configuration file.
+  - **Evaluation**:
+    - `evaluator = spoof_evaluator(model)`
+    - `evaluator.predict_images_labels(image_paths)`
+    - **Likelihood Estimation**: Estimate the likelihood based on predicted labels.
+
+#### 1.03: Spoof Detection Result
+- **Outcome**: Determine the most predicted outcome using the likelihood estimator (voting mechanism).
+
+#### 1.04: Similarity Check
+- **Reference Image**: Retrieve the reference image path.
+- **Candidate Repository**: Get the candidate repository path from the configuration manager.
+
+##### 1.04.01: Image Similarity Check (class `image_validator`)
+- **Similarity Check**: Compare candidate images with the reference image.
+  - `image_validator.image_similarity_check(image_paths, reference_image_path)`
+  - **Visualization**:
+    - `helper.plot_comparing_images(image_paths, reference_image)`
+    - `image_similarity_matcher.image_similarity_match(image_to_verify, reference_image)`
+    - `f.plot_similarity(scores)`
+  - **LIME XAI Report**: Generate LIME XAI Report for explanation (to be done).
+  - **Voting**: Determine the most common value and its count using:
+    - `most_common_value, count = helper.likelihood_estimator(verify_result)`
+
+#### 1.05: Result
+- **Final Decision**: Determine if the candidate passed or failed based on the similarity check and spoof detection results.
