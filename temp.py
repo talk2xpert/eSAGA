@@ -1,6 +1,5 @@
-import cv2
-import numpy as np
-import time
+import os
+
 
 
 def main():
@@ -62,5 +61,6 @@ def main():
 
 if __name__ == "__main__":
     # Create a named window to get window size information
-    cv2.namedWindow("Video Frame with Messages", cv2.WINDOW_NORMAL)
-    main()
+   # cv2.namedWindow("Video Frame with Messages", cv2.WINDOW_NORMAL)
+    #main()
+    print(os.getcwd())

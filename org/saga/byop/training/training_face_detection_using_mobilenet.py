@@ -122,15 +122,7 @@ class fraud_dectection_model_training_mobilenet:
             self.compile_model()
             self.fit_model(checkpoint_filepath, epochs)
 
-        def evaluate(self, test_data_dir, batch_size=32):
-            test_datagen = ImageDataGenerator(rescale=1.0 / 255)
-            self.test_generator = test_datagen.flow_from_directory(
-                test_data_dir,
-                target_size=self.target_size,
-                batch_size=self.batch_size,
-                class_mode='binary'  # Binary classification
-            )
-            return self.model.evaluate(self.test_generator)
+
 
         def predict(self):
             image_batch, label_batch = self.test_generator.next()
@@ -187,7 +179,16 @@ class fraud_dectection_model_training_mobilenet:
             self.model = keras.models.load_model(model_path)
             print(f"Model loaded from {model_path}")
 
-        def evaluate_plot(self):
+        def evaluate_plot(self,test_data_dir):
+
+            test_datagen = ImageDataGenerator(rescale=1.0 / 255)
+            self.test_generator = test_datagen.flow_from_directory(
+                test_data_dir,
+                target_size=self.target_size,
+                batch_size=self.batch_size,
+                class_mode='binary'  # Binary classification
+            )
+
             y_true = self.test_generator.classes
             y_pred_prob = self.model.predict(self.test_generator)
             y_pred = (y_pred_prob > 0.5).astype(int)  # Adjust threshold if needed
@@ -260,8 +261,8 @@ if __name__ == "__main__":
     #classifier.run_training(folder_path, checkpoint_filepath, epochs)
     #classifier.save_model(model_save_path)
     classifier.load_model(model_save_path)
-    classifier.evaluate("D:\\San\\IIM\\SEM3\\GROUP-BYOP\\source\\data\\LCC_FASD\\LCC_FASD_development")
-    classifier.evaluate_plot()
+    #classifier.evaluate("D:\\San\\IIM\\SEM3\\GROUP-BYOP\\source\\data\\LCC_FASD\\LCC_FASD_development")
+    classifier.evaluate_plot("D:\\San\\IIM\\SEM3\\GROUP-BYOP\\source\\data\\LCC_FASD\\LCC_FASD_development")
     #classifier.predict_and_plot()
 
     # Load the model and evaluate again to confirm it was saved and loaded correctly

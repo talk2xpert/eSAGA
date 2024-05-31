@@ -1,11 +1,2 @@
-tensorflow==2.16.1
-pillow
-numpy
-opencv-python
-Pillow
-deepface
-matplotlib
-pyyaml
-tf-keras
-keras-models
+tensorflow>=2.16,<2.17
 
