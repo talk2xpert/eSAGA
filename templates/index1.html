@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hugging Face Transformers Demo</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <style>
+        body {
+            margin: 20px;
+        }
+        .result {
+            margin-top: 10px;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-4 mb-4">Hugging Face Transformers Demo</h1>
+
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="sentiment-tab" data-toggle="tab" href="#sentiment" role="tab" aria-controls="sentiment" aria-selected="true">Sentiment Analysis</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="generation-tab" data-toggle="tab" href="#generation" role="tab" aria-controls="generation" aria-selected="false">Text Generation</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="ner-tab" data-toggle="tab" href="#ner" role="tab" aria-controls="ner" aria-selected="false">Named Entity Recognition (NER)</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="summarization-tab" data-toggle="tab" href="#summarization" role="tab" aria-controls="summarization" aria-selected="false">Text Summarization</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="translation-tab" data-toggle="tab" href="#translation" role="tab" aria-controls="translation" aria-selected="false">Translation</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="qa-tab" data-toggle="tab" href="#qa" role="tab" aria-controls="qa" aria-selected="false">Question Answering</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="zero-shot-tab" data-toggle="tab" href="#zero-shot" role="tab" aria-controls="zero-shot" aria-selected="false">Zero-Shot Classification</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat" aria-selected="false">Conversational AI</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="lm-tab" data-toggle="tab" href="#lm" role="tab" aria-controls="lm" aria-selected="false">Language Modeling</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="classification-tab" data-toggle="tab" href="#classification" role="tab" aria-controls="classification" aria-selected="false">Text Classification</a>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="myTabContent">
+            <!-- Sentiment Analysis Tab Pane -->
+            <div class="tab-pane fade show active" id="sentiment" role="tabpanel" aria-labelledby="sentiment-tab">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2 class="card-title">Sentiment Analysis</h2>
+                        <form action="/sentiment" method="post">
+                            <div class="form-group">
+                                <label for="sentiment_text">Enter text for sentiment analysis:</label>
+                                <textarea class="form-control" id="sentiment_text" name="text" rows="3">I love using Hugging Face's transformers library!</textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                        {% if task == 'sentiment' %}
+                            <div class="result mt-3">
+                                {% if sentiment_result %}
+                                    <p><strong>Sentiment:</strong> {{ sentiment_result[0]['label'] }} (Confidence: {{ sentiment_result[0]['score'] }})</p>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Text Generation Tab Pane -->
+            <div class="tab-pane fade" id="generation" role="tabpanel" aria-labelledby="generation-tab">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2 class="card-title">Text Generation</h2>
+                        <form action="/generation" method="post">
+                            <div class="form-group">
+                                <label for="generation_prompt">Enter prompt for text generation:</label>
+                                <textarea class="form-control" id="generation_prompt" name="prompt" rows="3">Once upon a time</textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Generate</button>
+                        </form>
+                        {% if task == 'generation' %}
+                            <div class="result mt-3">
+                                {% if generated_text %}
+                                    <p><strong>Generated Text:</strong></p>
+                                    <p>{{ generated_text[0]['generated_text'] }}</p>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Named Entity Recognition (NER) Tab Pane -->
+            <div class="tab-pane fade" id="ner" role="tabpanel" aria-labelledby="ner-tab">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2 class="card-title">Named Entity Recognition (NER)</h2>
+                        <form action="/ner" method="post">
+                            <div class="form-group">
+                                <label for="ner_text">Enter text for NER: </label>
+                                <textarea class="form-control" id="ner_text" name="text" rows="3">Hugging Face Inc. is a company based in New York City. Its headquarters are located at 123 Main Street.</textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Recognize Entities</button>
+                        </form>
+                        {% if task == 'ner' %}
+                            <div class="result mt-3">
+                                {% if entities %}
+                                    <p><strong>Entities:</strong></p>
+                                    <ul>
+                                        {% for entity in entities %}
+                                            <li>{{ entity['word'] }}: {{ entity['entity'] }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Text Summarization Tab Pane -->
+            <div class="tab-pane fade" id="summarization" role="tabpanel" aria-labelledby="summarization-tab">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2 class="card-title">Text Summarization</h2>
+                        <form action="/summarize" method="post">
+                            <div class="form-group">
+                                <label for="summarize_text">Enter text for summarization:</label>
+                                <textarea class="form-control" id="summarize_text" name="text" rows="3">Hugging Face Inc. is a company based in New York City. Its headquarters are located at 123 Main Street. The company specializes in developing state-of-the-art natural language processing models and tools. Founded in 2016, Hugging Face has become a leading provider of AI solutions, offering a wide range of products and services to businesses worldwide.</textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Summarize</button>
+                        </form>
+                        {% if task == 'summarization' %}
+                            <div class="result mt-3">
+                                {% if summary %}
+                                    <p><strong>Summary:</strong></p>
+                                    <p>{{ summary }}</p>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Translation Tab Pane -->
+            <div class="tab-pane fade" id="translation" role="tabpanel" aria-labelledby="translation-tab">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2 class="card-title">Translation</h2>
+                        <form action="/translate" method="post">
+                            <div class="form-group">
+                                <label for="translate_text">Enter text for translation (English to French):</label>
+                                <textarea class="form-control" id="translate_text" name="text" rows="3">Hugging Face is creating amazing tools for natural language processing.</textarea>
+                            </div>
+                            <button type="submit"                            <button type="submit" class="btn btn-primary">Translate</button>
+                        </form>
+                        {% if task == 'translation' %}
+                            <div class="result mt-3">
+                                {% if translation %}
+                                    <p><strong>Translation:</strong></p>
+                                    <p>{{ translation }}</p>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question Answering Tab Pane -->
+            <div class="tab-pane fade" id="qa" role="tabpanel" aria-labelledby="qa-tab">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2 class="card-title">Question Answering</h2>
+                        <form action="/qa" method="post">
+                            <div class="form-group">
+                                <label for="question">Enter a question:</label>
+                                <input type="text" class="form-control" id="question" name="question" value="Where is Hugging Face based?">
+                            </div>
+                            <div class="form-group">
+                                <label for="context">Enter context for the question:</label>
+                                <textarea class="form-control" id="context" name="context" rows="3">Hugging Face Inc. is a company based in New York City. Its headquarters are located at 123 Main Street.</textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Answer</button>
+                        </form>
+                        {% if task == 'question-answering' %}
+                            <div class="result mt-3">
+                                {% if answer %}
+                                    <p><strong>Answer:</strong></p>
+                                    <p>{{ answer }}</p>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Zero-Shot Classification Tab Pane -->
+            <div class="tab-pane fade" id="zero-shot" role="tabpanel" aria-labelledby="zero-shot-tab">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2 class="card-title">Zero-Shot Classification</h2>
+                        <form action="/zero_shot" method="post">
+                            <div class="form-group">
+                                <label for="zero_shot_text">Enter text for classification:</label>
+                                <textarea class="form-control" id="zero_shot_text" name="text" rows="3">Hugging Face is a company that creates natural language processing tools.</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="candidate_labels">Candidate labels (comma-separated):</label>
+                                <input type="text" class="form-control" id="candidate_labels" name="candidate_labels" value="technology, business, entertainment">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Classify</button>
+                        </form>
+                        {% if task == 'zero-shot-classification' %}
+                            <div class="result mt-3">
+                                {% if classification %}
+                                    <p><strong>Classification:</strong> {{ classification }} (Confidence: {{ confidence }})</p>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conversational AI Tab Pane -->
+            <div class="tab-pane fade" id="chat" role="tabpanel" aria-labelledby="chat-tab">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2 class="card-title">Conversational AI</h2>
+                        <form action="/chat" method="post">
+                            <div class="form-group">
+                                <label for="chat_input">Chat with the AI:</label>
+                                <input type="text" class="form-control" id="chat_input" name="user_input" value="Hello! How are you?">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Send</button>
+                        </form>
+                        {% if task == 'conversational' %}
+                            <div class="result mt-3">
+                                {% if response %}
+                                    <p><strong>Response:</strong></p>
+                                    <p>{{ response }}</p>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Language Modeling Tab Pane -->
+            <div class="tab-pane fade" id="lm" role="tabpanel" aria-labelledby="lm-tab">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2 class="card-title">Language Modeling</h2>
+                        <form action="/generate_text" method="post">
+                            <div class="form-group">
+                                <label for="lm_prompt">Enter prompt for text generation:</label>
+                                <textarea class="form-control" id="lm_prompt" name="prompt" rows="3">The future of AI is</textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Generate Text</button>
+                        </form>
+                        {% if task == 'language-modeling' %}
+                            <div class="result mt-3">
+                                {% if generated_text %}
+                                    <p><strong>Generated Text:</strong></p>
+                                    <p>{{ generated_text[0]['generated_text'] }}</p>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Text Classification Tab Pane -->
+            <div class="tab-pane fade" id="classification" role="tabpanel" aria-labelledby="classification-tab">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2 class="card-title">Text Classification</h2>
+                        <form action="/classification" method="post">
+                            <div class="form-group">
+                                <label for="classification_text">Enter text for sentiment classification:</label>
+                                <textarea class="form-control" id="classification_text" name="text" rows="3">I am happy because I am learning about transformers.</textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Classify</button>
+                        </form>
+                        {% if task == 'classification' %}
+                            <div class="result mt-3">
+                                {% if predicted_sentiment %}
+                                    <p><strong>Input Text:</strong> {{ input_text }}</p>
+                                    <p><strong>Predicted Sentiment:</strong> {{ predicted_sentiment }}</p>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"
+        integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU"
+        crossorigin="anonymous">
+</script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous">
+</script>
+</body>
+</html>
+

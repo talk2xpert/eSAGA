@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot UI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: vertical;
+            min-height: 100px;
+        }
+        .form-group button {
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .chat-box {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            min-height: 100px;
+        }
+        .chat-box p {
+            margin: 10px 0;
+        }
+        .user-message {
+            color: #007bff;
+        }
+        .bot-message {
+            color: #28a745;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="chat-form" action="/submitT" method="post">
+            <div class="form-group">
+                <label for="user-input">Enter your message:</label>
+                <textarea id="user-input" name="message" placeholder="Type your message here"></textarea>
+            </div>
+            <div class="form-group">
+                <button type="submit">Submit to Transformer</button>
+            </div>
+        </form>
+            <form id="chat-form1" action="/submit" method="post">
+            <div class="form-group">
+                <label for="user-input1">Enter your message:</label>
+                <textarea id="user-input1" name="message" placeholder="Type your message here"></textarea>
+            </div>
+            <div class="form-group">
+                <button type="submit">Submit to VTEXt</button>
+            </div>
+        </form>
+            <form id="chat-form2" action="/sentiment" method="post">
+            <div class="form-group">
+                <label for="user-input2">Enter your message:</label>
+                <textarea id="user-input2" name="message" placeholder="Type your message here"></textarea>
+            </div>
+            <div class="form-group">
+                <button type="submit">Sentiment Analysis using Model</button>
+            </div>
+        </form>
+        <div class="chat-box" id="chat-box">
+            {% for message in chat_history %}
+                <p class="{{ message.speaker.lower() }}-message">{{ message.speaker }}:  <p class="{{ message.speaker.lower() }}-message"> {{ message.message }}</p>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
