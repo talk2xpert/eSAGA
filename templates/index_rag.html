@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>File Upload and Query Chatbot</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9fafb;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 20px;
+        }
+        .container h2 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        #status, #chatbox-status {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #555;
+        }
+        .loading-icon {
+            display: none;
+            font-size: 20px;
+            color: #007BFF;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 10px;
+            color: #fff;
+            background: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .button:hover {
+            background: #0056b3;
+        }
+        .button:disabled {
+            background: #ddd;
+            cursor: not-allowed;
+        }
+        .response {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e9ecef;
+            border-radius: 5px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        input[type="file"],
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>LLM AND RAG Chatbot</h1>
+    <div class="container" id="upload-form">
+        <h2>Upload File</h2>
+        <div class="form-group">
+            <input type="file" id="file" name="file">
+        </div>
+        <button type="submit" class="button">Upload</button>
+        <span id="status"></span>
+        <span class="loading-icon" id="loading-icon"><i class="fas fa-spinner fa-spin"></i></span>
+    </div>
+    <div class="container" id="chatbox">
+        <h2>Query Chatbot</h2>
+        <div class="form-group">
+            <input type="text" id="query-input" placeholder="What information should be included for the point of contact in an RFP document">
+        </div>
+        <div class="form-group">
+            <input type="checkbox" id="use-llm"> <label for="use-llm">Use LLM</label>
+        </div>
+        <button id="query-button" class="button">Query</button>
+        <div id="chatbox-status"></div>
+        <div id="response" class="response"></div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#upload-form .button').on('click', function(e) {
+                e.preventDefault();
+                $('#status').text('Uploading and Generating Embeddings...');
+                $('#loading-icon').show();
+
+                var formData = new FormData();
+                formData.append('file', $('#file')[0].files[0]);
+
+                $.ajax({
+                    url: '/upload',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(data) {
+                        $('#loading-icon').hide();
+                        if (data.status === 'success') {
+                            $('#status').text('File uploaded successfully.');
+                        } else {
+                            $('#status').text('Error: ' + data.message);
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        $('#loading-icon').hide();
+                        $('#status').text('An error occurred while uploading the file: ' + textStatus);
+                    }
+                });
+            });
+
+            $('#query-button').on('click', function() {
+                var query = $('#query-input').val();
+                var useLLM = $('#use-llm').is(':checked');
+                $('#chatbox-status').text('Processing query...');
+
+                $.ajax({
+                    url: '/query',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ query: query, use_llm: useLLM }),
+                    success: function(data) {
+                        $('#chatbox-status').text('');
+                        if (data.status === 'success') {
+                            $('#response').text(data.response);
+                        } else {
+                            $('#response').text('Error: ' + data.message);
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        $('#chatbox-status').text('An error occurred while processing the query: ' + textStatus);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
