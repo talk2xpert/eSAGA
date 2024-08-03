@@ -36,12 +36,12 @@ def get_llm_rag_query_results(file,query):
     response = LLMU.query_rag(document_chain, chat_history, result_documents)
    # print("4",response)
     return response
-
-results=get_llm_rag_query_results("C:\\dataset\\java.pdf" ,"what are Objects in java")
-
-print("FROM RAG")
-#result_strings = [x.dict()['page_content'] for x in results]
-print(results)
+#
+# results=get_llm_rag_query_results("C:\\dataset\\java.pdf" ,"what are Objects in java")
+#
+# print("FROM RAG")
+# #result_strings = [x.dict()['page_content'] for x in results]
+# print(results)
 
 
 

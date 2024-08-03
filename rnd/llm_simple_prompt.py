@@ -39,6 +39,6 @@ chain = prompt_template | model | parser
 #1
 #response =chain.invoke({"language": "french", "text": "hello"})
 #2
-response =chain.invoke({"text":"what are Objects in java"})
-print(response)
+#response =chain.invoke({"text":"what are Objects in java"})
+#print(response)
 

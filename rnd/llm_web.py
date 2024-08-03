@@ -53,7 +53,7 @@ def get_Vector_DB_Results(pdf_file,query):
     print(rag_chain)
 
 
-get_Vector_DB_Results("C:\\dataset\\java.pdf" ,"what are agents in llm")
+#get_Vector_DB_Results("C:\\dataset\\java.pdf" ,"what are agents in llm")
 
 
 

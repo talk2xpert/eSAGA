@@ -7,7 +7,8 @@ from flask_cors import CORS
 
 import rnd.llm_vector_similarity as vector_simi
 from rnd import  llm_rag_pdf as llm_rag
-
+import rnd.LLMUTILS as LLMU
+from rnd import  llm_simple_prompt as simple
 app = Flask(__name__)
 CORS(app)
 
@@ -28,6 +29,25 @@ app.secret_key = secrets.token_hex(16)
 @app.route('/')
 def index():
     return render_template('index_rag.html')
+@app.route('/for_bot')
+def index1():
+    return render_template('index_rag1.html')
+
+@app.route('/bot', methods=['POST'])
+def simple_prompt():
+    data = request.json
+    query = data.get('query')
+    prompt_type = data.get('type')
+
+    # Simulate response based on prompt type
+    if prompt_type == 'question':
+        response = f"You asked: '{query}'. Here is a response to your question." + LLMU.simple_prompt(query)
+    elif prompt_type == 'translation':
+        response = f"You asked to translate: '{query}'. Here is the translation." ++ LLMU.simple_prompt(query)
+    else:
+        response = "Sorry, I didn't understand your request."
+
+    return jsonify({'response': response})
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -73,4 +93,4 @@ def query_file():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True,port=8081)

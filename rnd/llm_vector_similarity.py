@@ -17,11 +17,11 @@ def get_Vector_DB_Results(pdf_file,query):
     return results
 
 
-results=get_Vector_DB_Results("C:\\dataset\\java.pdf" ,"what are Objects in java")
-
-print("FROM VECOTR EMBEDDINGS")
-result_strings = [x.dict()['page_content'] for x in results]
-print(result_strings)
+# results=get_Vector_DB_Results("C:\\dataset\\java.pdf" ,"what are Objects in java")
+#
+# print("FROM VECOTR EMBEDDINGS")
+# result_strings = [x.dict()['page_content'] for x in results]
+# print(result_strings)
 
 
 
