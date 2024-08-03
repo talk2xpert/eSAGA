@@ -35,15 +35,18 @@ def index1():
 
 @app.route('/bot', methods=['POST'])
 def simple_prompt():
+
     data = request.json
     query = data.get('query')
     prompt_type = data.get('type')
+    print("******************In Chat Bot*****************")
 
     # Simulate response based on prompt type
     if prompt_type == 'question':
-        response = f"You asked: '{query}'. Here is a response to your question." + LLMU.simple_prompt(query)
+        response = f"You asked: '{query}'. Here is a response to your question." + LLMU.simple_prompt_qa(query)
     elif prompt_type == 'translation':
-        response = f"You asked to translate: '{query}'. Here is the translation." ++ LLMU.simple_prompt(query)
+        language = data.get('language')
+        response = f"You asked to translate: '{query}'. Here is the translation." ++ LLMU.simple_prompt_translater(query,language)
     else:
         response = "Sorry, I didn't understand your request."
 
@@ -93,4 +96,5 @@ def query_file():
 
 
 if __name__ == '__main__':
-    app.run(debug=True,port=8081)
+    app.run(debug=True)
+    #http://127.0.0.1:8081/for_bot
